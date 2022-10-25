@@ -1,14 +1,14 @@
-#Импорт используемых библиотек и токена
+# importing libraries to be used
 from telebot import types
 import time
 import cv2
 from Settings import CONST_bot_token as bot
 
-#Установление используемых каскадов для распознования
+# setting the cascades used for recognition
 face_cascade_db = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_eye.xml")
 
-#Алгоритм распознования лица
+# face recognition algorithm function
 def raspoznovanie(image_path):
     img = cv2.imread(image_path)
     img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -23,7 +23,7 @@ def raspoznovanie(image_path):
     cv2.imwrite(new_path, img)
     return new_path
 
-#Функция удаления неиспользуемого контента для предотвращения засорения временной папки
+# temporary folder cleanup function
 # def clear_content(chat_id):
 #      try:
 #          for img in images[chat_id]:
@@ -33,10 +33,10 @@ def raspoznovanie(image_path):
 #          clear_content(chat_id)
 #      images[chat_id] = []
 
-#Создание нового ассоциативного массива
+# creating the new associative array
 images = dict()
 
-#Описание начала работы бота
+# description of the start of the bot
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     bot.reply_to(message, "Здравствуйте")
@@ -57,7 +57,7 @@ def send_welcome(message):
                      parse_mode='html', reply_markup=markup)
 
 
-#Описание рабочей части бота
+# description of the main part of my bot
 @bot.message_handler(content_types=['text'])
 def lalala(message):
     if message.chat.type == 'private':
@@ -75,7 +75,7 @@ def lalala(message):
         else:
             bot.send_message(message.chat.id, 'Я не знаю что ответить 😢, Напиши /go')
 
-#Загрузка фотографий на сервер
+# upload photos to the server
 @bot.message_handler(content_types=['photo'])
 def handle_docs_photo(message):
     try:
@@ -108,8 +108,8 @@ def handle_docs_photo(message):
         #clear_content(str(message.chat.id))
 
 
-# #Описание общительной части бота
-@   bot.callback_query_handler(func=lambda call: True)
+# description of the working part of the bot
+@bot.callback_query_handler(func=lambda call: True)
 def callback_inline(call):
     try:
         if call.message:
